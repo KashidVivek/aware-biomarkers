@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.aware.phone">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.aware.dh_client">
 
     <permission
         android:name="com.aware.READ_CONTEXT_DATA"
@@ -57,8 +58,9 @@
     <application
         android:icon="@drawable/ic_launcher_aware"
         android:label="DH Project"
-        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
-        <activity android:name=".MainActivity"
+        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+        tools:replace="android:icon, android:label">
+        <activity android:name="com.aware.dh_client.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:icon="@drawable/ic_launcher_aware"

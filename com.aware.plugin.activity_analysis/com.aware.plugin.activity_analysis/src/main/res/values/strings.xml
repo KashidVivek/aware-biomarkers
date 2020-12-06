@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AWARE: Activity Analysis</string>
+    <string name="plugin_activity_analysis">Plugin: Activity Analysis</string>
+</resources>

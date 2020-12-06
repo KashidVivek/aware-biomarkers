@@ -7,37 +7,49 @@ import com.ibm.cloud.sdk.core.security.IamAuthenticator;
 import com.ibm.watson.tone_analyzer.v3.ToneAnalyzer;
 import com.ibm.watson.tone_analyzer.v3.model.ToneAnalysis;
 import com.ibm.watson.tone_analyzer.v3.model.ToneOptions;
+import com.ibm.watson.tone_analyzer.v3.model.ToneScore;
 
-public class RetrieveToneTask extends AsyncTask<Void,Void,String> {
+import java.util.List;
+
+public class RetrieveToneTask extends AsyncTask<Void, Void, String> {
     private Context context;
     public String textToAnalyse;
     public String EMPTY_TONE = "NO_TONE_DETECTED";
 
-    public RetrieveToneTask(Context context, String textToAnalyse){
+    public RetrieveToneTask(Context context, String textToAnalyse) {
         this.context = context;
         this.textToAnalyse = textToAnalyse;
     }
+
     @Override
     protected String doInBackground(Void... voids) {
         if (textToAnalyse != null) {
-            IamAuthenticator authenticator = new IamAuthenticator("Ufr3FL9wHAotv_f7QItN7Q_EKvUHkpK-B88J5USZWloR");
+            IamAuthenticator authenticator = new IamAuthenticator("a8nJbptIdys2frNlnLbg98k4quhKLI2n3ql_CmbJQR-8");
             ToneAnalyzer toneAnalyzer = new ToneAnalyzer("2017-09-21", authenticator);
-            toneAnalyzer.setServiceUrl("https://api.us-south.tone-analyzer.watson.cloud.ibm.com/instances/94baf436-8819-49d9-af67-cf6c3fc3345c");
+            toneAnalyzer.setServiceUrl("https://api.us-south.tone-analyzer.watson.cloud.ibm.com/instances/7c470a57-31c7-45fd-a759-4c5f5cd59100");
             ToneOptions toneOptions = new ToneOptions.Builder()
                     .text(textToAnalyse)
                     .build();
 
             ToneAnalysis toneAnalysis = toneAnalyzer.tone(toneOptions).execute().getResult();
-            if(toneAnalysis.getDocumentTone().getTones().toString().equals("[]")){
+            if (toneAnalysis.getDocumentTone().getTones().toString().equals("[]")) {
                 return EMPTY_TONE;
             }
-            String msg = toneAnalysis.getDocumentTone().getTones().get(0).getToneName();
+            String msg = "";
+            List<ToneScore> scores = toneAnalysis.getDocumentTone().getTones();
+            double maxScore = 0;
+            for (ToneScore score : scores) {
+                if (score.getScore() > maxScore) {
+                    msg = score.getToneName();
+                    maxScore = score.getScore();
+                }
+            }
+
             if (msg != null)
                 return msg;
             else
                 return EMPTY_TONE;
-        }
-        else{
+        } else {
             return EMPTY_TONE;
         }
     }

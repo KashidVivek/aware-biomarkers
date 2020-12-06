@@ -79,8 +79,18 @@ public class Plugin extends Aware_Plugin {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+//                JSONObject callsrow = new JSONObject();
+
+                try {
+                    row.put(Provider.ToneAnalyser_Data.TIMESTAMP, System.currentTimeMillis());
+                    row.put(Provider.ToneAnalyser_Data.DEVICE_ID, Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID));
+                    row.put(Provider.ToneAnalyser_Data.TONE, getTone());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 new MyTask().execute(row);
+//                new MyCallsTask().execute(callsRow);
 
                 Intent sharedContext = new Intent(ACTION_AWARE_PLUGIN_TONE_ANALYSER);
                 sharedContext.putExtra(TONE, tone);
@@ -137,7 +147,7 @@ public class Plugin extends Aware_Plugin {
                 public void onReceive(Context context, Intent intent) {
                     if(intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
                         minutes ++;
-                        if (minutes == 4){
+                        if (minutes == 480){
                             Cursor keyboardCursor = getContentResolver().query(Keyboard_Provider.Keyboard_Data.CONTENT_URI,null, selection,selectionArgs,null);
                             List<String> text = new ArrayList<String>();
 
@@ -155,12 +165,17 @@ public class Plugin extends Aware_Plugin {
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
+                                CONTEXT_PRODUCER.onContext();
+                                context.getContentResolver().delete(Keyboard_Provider.Keyboard_Data.CONTENT_URI,null,null);
+                                minutes = 0;
                             }
-                            CONTEXT_PRODUCER.onContext();
-                            context.getContentResolver().delete(Provider.ToneAnalyser_Data.CONTENT_URI,null,null);
-                            minutes = 0;
+                            else{
+                                setTone("NO_TONE_DETECTED");
+                                CONTEXT_PRODUCER.onContext();
+                            }
                         }
                     }
+
                 }
             };
             registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
@@ -212,6 +227,32 @@ public class Plugin extends Aware_Plugin {
             postData.put("data", Arrays.toString(rows));
             String setting = Aware.getSetting(getApplicationContext(), Aware_Preferences.WEBSERVICE_SERVER);
             http.dataPOST(setting + "/tone_analysis/insert", postData, false);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+        }
+    }
+
+    private class MyCallsTask extends AsyncTask<JSONObject, Void, Void> {
+        @Override
+        protected Void doInBackground(JSONObject... rows) {
+
+            if (rows == null) {
+                return null;
+            }
+
+            String deviceID = Aware.getSetting(getApplicationContext(), Aware_Preferences.DEVICE_ID);
+
+            Http http = new Http();
+            Hashtable<String, String> postData = new Hashtable<>();
+            postData.put(Aware_Preferences.DEVICE_ID, deviceID);
+
+            postData.put("data", Arrays.toString(rows));
+            String setting = Aware.getSetting(getApplicationContext(), Aware_Preferences.WEBSERVICE_SERVER);
+            http.dataPOST(setting + "/calls/insert", postData, false);
             return null;
         }
 

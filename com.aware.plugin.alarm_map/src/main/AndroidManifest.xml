@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.aware.plugin.alarm_map">
+
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        tools:replace="android:icon, android:label">
+
+        <!-- Use a hardcoded label string on the service
+        to keep the name of the original plugin if added as a library to another -->
+        <service
+            android:name="com.aware.plugin.alarm_map.Plugin"
+            android:exported="true"
+            android:label="AWARE: Plugin Activity Analysis" />
+
+        <activity
+            android:name="com.aware.plugin.alarm_map.Settings"
+            android:exported="true" />
+
+        <!-- Keep the ${applicationId} so there are no conflicts when merging this plugin as a library for reuse. Update the plugin_template string in values -->
+        <provider
+            android:name="com.aware.plugin.alarm_map.Provider"
+            android:authorities="${applicationId}.provider.plugin_alarm_map"
+            android:exported="true"
+            android:label="@string/plugin_activity_analysis"
+            android:readPermission="com.aware.READ_CONTEXT_DATA"
+            android:writePermission="com.aware.WRITE_CONTEXT_DATA" />
+
+        <service
+            android:name="com.aware.plugin.alarm_map.syncadapters.ActivityAnalysisSync"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_plugin_activity_analysis" />
+        </service>
+</application>
+</manifest>

@@ -34,6 +34,8 @@ android {
         //plugins
         resValue "string", "provider_ambient_noise", android.defaultConfig.applicationId + ".provider.ambient_noise"
         resValue "string", "provider_google_activity_recognition", android.defaultConfig.applicationId + ".provider.gar"
+        resValue "string", "provider_activity_analysis", android.defaultConfig.applicationId + ".provider.plugin_activity_analysis"
+        resValue "string", "provider_noise_analysis", android.defaultConfig.applicationId + ".provider.plugin_noise_analysis"
     }
 
     splits {
@@ -98,10 +100,14 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0-alpha03'
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
-    api (project(':aware-core'))
-    api (project(":com.aware.plugin.ambient_noise"))
-    api (project(":com.aware.plugin.google.activity_recognition"))
+    api(project(':aware-core'))
+    implementation project(":com.aware.plugin.ambient_noise")
+    api(project(":com.aware.plugin.noise_analysis"))
+    api(project(":com.aware.plugin.google.activity_recognition"))
+    api(project(":com.aware.plugin.activity_analysis"))
+    implementation project(":com.aware.plugin.alarm_map")
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation project(path: ':tone_analyser')
 }
 
 repositories {

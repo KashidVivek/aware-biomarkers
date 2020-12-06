@@ -1,5 +1,5 @@
-AWARE Framework Android Client
-======================
+ AWARE Framework Android Client
+===============================
 [![Release](https://jitpack.io/v/denzilferreira/aware-client.svg)](https://jitpack.io/#denzilferreira/aware-client)
 
 AWARE is an Android framework dedicated to instrument, infer, log and share mobile context information,

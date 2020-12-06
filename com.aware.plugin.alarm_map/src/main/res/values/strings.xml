@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AWARE: Alarm Map</string>
+    <string name="plugin_activity_analysis">Plugin: Alarm Map</string>
+</resources>
