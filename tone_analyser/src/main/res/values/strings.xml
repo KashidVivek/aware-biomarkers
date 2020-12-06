@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AWARE: Plugin tone_analyser</string>
+    <string name="plugin_template">Plugin: tone_analyser</string>
+</resources>

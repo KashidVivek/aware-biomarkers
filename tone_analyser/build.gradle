@@ -1,0 +1,44 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion compile_sdk
+    buildToolsVersion build_tools
+
+    defaultConfig {
+        //applicationId "com.aware.plugin.tone_analyser" //EDIT ME
+        minSdkVersion 24
+        targetSdkVersion target_sdk
+        versionCode version_code
+        versionName version_readable
+        multiDexEnabled true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    signingConfigs {
+        release
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+repositories {
+    maven { url 'https://jitpack.io' } //this allows library generation directly from GitHub source-code
+}
+
+dependencies {
+    api "com.github.denzilferreira:aware-client:$aware_libs"
+    compile 'com.ibm.watson:ibm-watson:8.6.3'
+
+}
